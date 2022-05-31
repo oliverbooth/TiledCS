@@ -179,10 +179,12 @@ public sealed class TiledMap
 
         foreach (XmlNode node in nodeList)
         {
-            var property = new TiledProperty();
-            property.Name = node.Attributes["name"].Value;
-            property.Type = node.Attributes["type"]?.Value;
-            property.Value = node.Attributes["value"]?.Value;
+            var property = new TiledProperty
+            {
+                Name = node.Attributes["name"].Value,
+                Type = node.Attributes["type"]?.Value,
+                Value = node.Attributes["value"]?.Value
+            };
 
             if (property.Value == null && node.InnerText != null) property.Value = node.InnerText;
 
@@ -198,9 +200,11 @@ public sealed class TiledMap
 
         foreach (XmlNode node in nodeList)
         {
-            var tileset = new TiledMapTileset();
-            tileset.FirstGid = int.Parse(node.Attributes["firstgid"].Value);
-            tileset.Source = node.Attributes["source"].Value;
+            var tileset = new TiledMapTileset
+            {
+                FirstGid = int.Parse(node.Attributes["firstgid"].Value),
+                Source = node.Attributes["source"].Value
+            };
 
             result.Add(tileset);
         }
@@ -222,9 +226,11 @@ public sealed class TiledMap
             XmlAttribute attrVisible = node.Attributes["visible"];
             XmlAttribute attrLocked = node.Attributes["locked"];
 
-            var tiledGroup = new TiledGroup();
-            tiledGroup.Id = int.Parse(node.Attributes["id"].Value);
-            tiledGroup.Name = node.Attributes["name"].Value;
+            var tiledGroup = new TiledGroup
+            {
+                Id = int.Parse(node.Attributes["id"].Value),
+                Name = node.Attributes["name"].Value
+            };
 
             if (attrVisible != null) tiledGroup.IsVisible = attrVisible.Value == "1";
             if (attrLocked != null) tiledGroup.IsLocked = attrLocked.Value == "1";
@@ -263,9 +269,11 @@ public sealed class TiledMap
         XmlAttribute attrParallaxX = node.Attributes["parallaxx"];
         XmlAttribute attrParallaxY = node.Attributes["parallaxy"];
 
-        var tiledLayer = new TiledLayer();
-        tiledLayer.Id = int.Parse(node.Attributes["id"].Value);
-        tiledLayer.Name = node.Attributes["name"].Value;
+        var tiledLayer = new TiledLayer
+        {
+            Id = int.Parse(node.Attributes["id"].Value),
+            Name = node.Attributes["name"].Value
+        };
 
         int width = int.Parse(node.Attributes["width"].Value);
         int height = int.Parse(node.Attributes["height"].Value);
@@ -311,11 +319,13 @@ public sealed class TiledMap
 
             foreach (XmlNode nodeChunk in nodesChunk)
             {
-                var chunk = new TiledChunk();
-                chunk.X = int.Parse(nodeChunk.Attributes["x"].Value);
-                chunk.Y = int.Parse(nodeChunk.Attributes["y"].Value);
-                chunk.Width = int.Parse(nodeChunk.Attributes["width"].Value);
-                chunk.Height = int.Parse(nodeChunk.Attributes["height"].Value);
+                var chunk = new TiledChunk
+                {
+                    X = int.Parse(nodeChunk.Attributes["x"].Value),
+                    Y = int.Parse(nodeChunk.Attributes["y"].Value),
+                    Width = int.Parse(nodeChunk.Attributes["width"].Value),
+                    Height = int.Parse(nodeChunk.Attributes["height"].Value)
+                };
 
                 if (encoding == "csv")
                 {
@@ -484,12 +494,14 @@ public sealed class TiledMap
         XmlAttribute attrOffsetX = node.Attributes["offsetx"];
         XmlAttribute attrOffsetY = node.Attributes["offsety"];
 
-        var tiledLayer = new TiledLayer();
-        tiledLayer.Id = int.Parse(node.Attributes["id"].Value);
-        tiledLayer.Name = node.Attributes["name"].Value;
-        tiledLayer.Objects = ParseObjects(nodesObject);
-        tiledLayer.Type = TiledLayerType.ObjectLayer;
-        tiledLayer.IsVisible = true;
+        var tiledLayer = new TiledLayer
+        {
+            Id = int.Parse(node.Attributes["id"].Value),
+            Name = node.Attributes["name"].Value,
+            Objects = ParseObjects(nodesObject),
+            Type = TiledLayerType.ObjectLayer,
+            IsVisible = true
+        };
 
         var offsetX = 0.0f;
         var offsetY = 0.0f;
@@ -516,11 +528,13 @@ public sealed class TiledMap
         XmlAttribute attrOffsetX = node.Attributes["offsetx"];
         XmlAttribute attrOffsetY = node.Attributes["offsety"];
 
-        var tiledLayer = new TiledLayer();
-        tiledLayer.Id = int.Parse(node.Attributes["id"].Value);
-        tiledLayer.Name = node.Attributes["name"].Value;
-        tiledLayer.Type = TiledLayerType.ImageLayer;
-        tiledLayer.IsVisible = true;
+        var tiledLayer = new TiledLayer
+        {
+            Id = int.Parse(node.Attributes["id"].Value),
+            Name = node.Attributes["name"].Value,
+            Type = TiledLayerType.ImageLayer,
+            IsVisible = true
+        };
 
         var offsetX = 0.0f;
         var offsetY = 0.0f;
@@ -539,10 +553,12 @@ public sealed class TiledMap
 
     private TiledImage ParseImage(XmlNode node)
     {
-        var tiledImage = new TiledImage();
-        tiledImage.Source = node.Attributes["source"].Value;
-        tiledImage.Width = int.Parse(node.Attributes["width"].Value);
-        tiledImage.Height = int.Parse(node.Attributes["height"].Value);
+        var tiledImage = new TiledImage
+        {
+            Source = node.Attributes["source"].Value,
+            Width = int.Parse(node.Attributes["width"].Value),
+            Height = int.Parse(node.Attributes["height"].Value)
+        };
 
         return tiledImage;
     }
@@ -558,11 +574,13 @@ public sealed class TiledMap
             XmlNode nodePoint = node.SelectSingleNode("point");
             XmlNode nodeEllipse = node.SelectSingleNode("ellipse");
 
-            var obj = new TiledObject();
-            obj.Id = int.Parse(node.Attributes["id"].Value);
-            obj.Name = node.Attributes["name"]?.Value;
-            obj.Type = node.Attributes["type"]?.Value;
-            obj.Gid = int.Parse(node.Attributes["gid"]?.Value ?? "0");
+            var obj = new TiledObject
+            {
+                Id = int.Parse(node.Attributes["id"].Value),
+                Name = node.Attributes["name"]?.Value,
+                Type = node.Attributes["type"]?.Value,
+                Gid = int.Parse(node.Attributes["gid"]?.Value ?? "0")
+            };
 
             float x = float.Parse(node.Attributes["x"].Value, CultureInfo.InvariantCulture);
             float y = float.Parse(node.Attributes["y"].Value, CultureInfo.InvariantCulture);
@@ -575,8 +593,10 @@ public sealed class TiledMap
                 string points = nodePolygon.Attributes["points"].Value;
                 string[] vertices = points.Split(' ');
 
-                var polygon = new TiledPolygon();
-                polygon.Points = new float[vertices.Length * 2];
+                var polygon = new TiledPolygon
+                {
+                    Points = new float[vertices.Length * 2]
+                };
 
                 for (var i = 0; i < vertices.Length; i++)
                 {

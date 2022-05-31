@@ -136,10 +136,12 @@ public sealed class TiledTileset
 
     private TiledImage ParseImage(XmlNode node)
     {
-        var tiledImage = new TiledImage();
-        tiledImage.Source = node.Attributes["source"].Value;
-        tiledImage.Width = int.Parse(node.Attributes["width"].Value);
-        tiledImage.Height = int.Parse(node.Attributes["height"].Value);
+        var tiledImage = new TiledImage
+        {
+            Source = node.Attributes["source"].Value,
+            Width = int.Parse(node.Attributes["width"].Value),
+            Height = int.Parse(node.Attributes["height"].Value)
+        };
 
         return tiledImage;
     }
@@ -150,9 +152,11 @@ public sealed class TiledTileset
 
         foreach (XmlNode node in nodeList)
         {
-            var animation = new TiledTileAnimation();
-            animation.TileId = int.Parse(node.Attributes["tileid"].Value);
-            animation.Duration = TimeSpan.FromMilliseconds(long.Parse(node.Attributes["duration"].Value));
+            var animation = new TiledTileAnimation
+            {
+                TileId = int.Parse(node.Attributes["tileid"].Value),
+                Duration = TimeSpan.FromMilliseconds(long.Parse(node.Attributes["duration"].Value))
+            };
 
             result.Add(animation);
         }
@@ -166,10 +170,12 @@ public sealed class TiledTileset
 
         foreach (XmlNode node in nodeList)
         {
-            var property = new TiledProperty();
-            property.Name = node.Attributes["name"].Value;
-            property.Type = node.Attributes["type"]?.Value;
-            property.Value = node.Attributes["value"]?.Value;
+            var property = new TiledProperty
+            {
+                Name = node.Attributes["name"].Value,
+                Type = node.Attributes["type"]?.Value,
+                Value = node.Attributes["value"]?.Value
+            };
 
             if (property.Value == null && node.InnerText != null) property.Value = node.InnerText;
 
@@ -190,20 +196,24 @@ public sealed class TiledTileset
             XmlNodeList nodesAnimation = node.SelectNodes("animation/frame");
             XmlNode nodeImage = node.SelectSingleNode("image");
 
-            var tile = new TiledTile();
-            tile.Id = int.Parse(node.Attributes["id"].Value);
-            tile.Type = node.Attributes["type"]?.Value;
-            tile.Terrain = node.Attributes["terrain"]?.Value.Split(',').AsIntArray();
-            tile.Properties = ParseProperties(nodesProperty);
-            tile.Animation = ParseAnimations(nodesAnimation);
-            tile.Objects = ParseObjects(nodesObject);
+            var tile = new TiledTile
+            {
+                Id = int.Parse(node.Attributes["id"].Value),
+                Type = node.Attributes["type"]?.Value,
+                Terrain = node.Attributes["terrain"]?.Value.Split(',').AsIntArray(),
+                Properties = ParseProperties(nodesProperty),
+                Animation = ParseAnimations(nodesAnimation),
+                Objects = ParseObjects(nodesObject)
+            };
 
             if (nodeImage != null)
             {
-                var tileImage = new TiledImage();
-                tileImage.Width = int.Parse(nodeImage.Attributes["width"].Value);
-                tileImage.Height = int.Parse(nodeImage.Attributes["height"].Value);
-                tileImage.Source = nodeImage.Attributes["source"].Value;
+                var tileImage = new TiledImage
+                {
+                    Width = int.Parse(nodeImage.Attributes["width"].Value),
+                    Height = int.Parse(nodeImage.Attributes["height"].Value),
+                    Source = nodeImage.Attributes["source"].Value
+                };
 
                 tile.Image = tileImage;
             }
@@ -225,11 +235,13 @@ public sealed class TiledTileset
             XmlNode nodePoint = node.SelectSingleNode("point");
             XmlNode nodeEllipse = node.SelectSingleNode("ellipse");
 
-            var obj = new TiledObject();
-            obj.Id = int.Parse(node.Attributes["id"].Value);
-            obj.Name = node.Attributes["name"]?.Value;
-            obj.Type = node.Attributes["type"]?.Value;
-            obj.Gid = int.Parse(node.Attributes["gid"]?.Value ?? "0");
+            var obj = new TiledObject
+            {
+                Id = int.Parse(node.Attributes["id"].Value),
+                Name = node.Attributes["name"]?.Value,
+                Type = node.Attributes["type"]?.Value,
+                Gid = int.Parse(node.Attributes["gid"]?.Value ?? "0")
+            };
 
             float x = float.Parse(node.Attributes["x"].Value, CultureInfo.InvariantCulture);
             float y = float.Parse(node.Attributes["y"].Value, CultureInfo.InvariantCulture);
@@ -242,8 +254,10 @@ public sealed class TiledTileset
                 string points = nodePolygon.Attributes["points"].Value;
                 string[] vertices = points.Split(' ');
 
-                var polygon = new TiledPolygon();
-                polygon.Points = new float[vertices.Length * 2];
+                var polygon = new TiledPolygon
+                {
+                    Points = new float[vertices.Length * 2]
+                };
 
                 for (var i = 0; i < vertices.Length; i++)
                 {
