@@ -633,8 +633,10 @@ namespace TiledCS
                 if (File.Exists(path))
                     tilesets.Add(mapTileset.FirstGid, new TiledTileset(path));
                 else
+                {
                     throw new TiledException("Cannot locate tileset '" + path +
                                              "'. Please make sure the source folder is correct and it ends with a slash.");
+                }
             }
 
             return tilesets;
@@ -654,9 +656,8 @@ namespace TiledCS
         public TiledTile GetTiledTile(TiledMapTileset mapTileset, TiledTileset tileset, int gid)
         {
             foreach (TiledTile tile in tileset.Tiles)
-            {
-                if (tile.Id == gid - mapTileset.FirstGid) return tile;
-            }
+                if (tile.Id == gid - mapTileset.FirstGid)
+                    return tile;
 
             return null;
         }
