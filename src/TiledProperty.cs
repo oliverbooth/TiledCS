@@ -1,4 +1,6 @@
-﻿namespace TiledCS;
+﻿using System.Collections.Generic;
+
+namespace TiledCS;
 
 /// <summary>
 ///     Represents a property object in both tilesets, maps, layers and objects. Values are all in string but you can use the 'type'
@@ -20,4 +22,14 @@ public sealed class TiledProperty
     ///     Gets the value in string format.
     /// </summary>
     public string Value { get; internal set; }
+
+    /// <summary>
+    ///     Implicitly converts this property a <see cref="KeyValuePair{TKey,TValue}" /> with <see cref="string" /> key and value.
+    /// </summary>
+    /// <param name="property">The property to convert.</param>
+    /// <returns>The converted <see cref="KeyValuePair{TKey,TValue}" />.</returns>
+    public static implicit operator KeyValuePair<string, string>(TiledProperty property)
+    {
+        return new KeyValuePair<string, string>(property.Name, property.Value);
+    }
 }
