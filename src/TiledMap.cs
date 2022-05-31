@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
@@ -704,10 +705,10 @@ namespace TiledCS
         /// <param name="tileset"></param>
         /// <param name="gid"></param>
         /// <returns>
-        ///     An instance of the class TiledSourceRect that represents a rectangle. Returns null if the provided gid was not found
-        ///     within the tileset.
+        ///     The source rectangle that encapsulates the tile at the specified GID, or <see cref="Rectangle.Empty" /> if the
+        ///     GID was not found.
         /// </returns>
-        public TiledSourceRect GetSourceRect(TiledMapTileset mapTileset, TiledTileset tileset, int gid)
+        public Rectangle GetSourceRect(TiledMapTileset mapTileset, TiledTileset tileset, int gid)
         {
             var tileHor = 0;
             var tileVert = 0;
@@ -716,13 +717,10 @@ namespace TiledCS
             {
                 if (i == gid - mapTileset.FirstGid)
                 {
-                    var result = new TiledSourceRect();
-                    result.X = tileHor * tileset.TileWidth;
-                    result.Y = tileVert * tileset.TileHeight;
-                    result.Width = tileset.TileWidth;
-                    result.Height = tileset.TileHeight;
+                    int x = tileHor * tileset.TileWidth;
+                    int y = tileVert * tileset.TileHeight;
 
-                    return result;
+                    return new Rectangle(x, y, tileset.TileWidth, tileset.TileHeight);
                 }
 
                 // Update x and y position
@@ -735,7 +733,7 @@ namespace TiledCS
                 }
             }
 
-            return null;
+            return Rectangle.Empty;
         }
 
         /// <summary>
