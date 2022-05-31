@@ -1,4 +1,6 @@
-﻿namespace TiledCS
+﻿using TiledCS.Shapes;
+
+namespace TiledCS
 {
     /// <summary>
     ///     Represents an tiled object defined in object layers and tiles.
