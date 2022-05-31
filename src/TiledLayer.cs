@@ -70,9 +70,10 @@ public class TiledLayer
     public TiledProperty[] Properties { get; internal set; }
 
     /// <summary>
-    ///     Gets the tint color set by the user in hex code.
+    ///     Gets the layer's tint color.
     /// </summary>
-    public string TintColor { get; internal set; }
+    /// <value>The tint color, or <see langword="null" /> if this value is not set.</value>
+    public Color? TintColor { get; internal set; }
 
     /// <summary>
     ///     Gets the layer type..

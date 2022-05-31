@@ -110,7 +110,7 @@ public class TiledMap
     /// <summary>
     ///     Returns the defined map background color as a hex string
     /// </summary>
-    public string BackgroundColor { get; set; }
+    public Color? BackgroundColor { get; set; }
 
     /// <summary>
     ///     Can be used to parse the content of a TMX map manually instead of loading it using the constructor
@@ -138,7 +138,8 @@ public class TiledMap
             Version = nodeMap.Attributes["tiledversion"].Value;
             Orientation = nodeMap.Attributes["orientation"].Value;
             RenderOrder = nodeMap.Attributes["renderorder"].Value;
-            BackgroundColor = nodeMap.Attributes["backgroundcolor"]?.Value;
+            if (nodeMap.Attributes["backgroundcolor"]?.Value is { } backgroundColor)
+                BackgroundColor = TiledUtilities.HexToColor(backgroundColor);
             Infinite = nodeMap.Attributes["infinite"].Value == "1";
 
             int width = int.Parse(nodeMap.Attributes["width"].Value);
@@ -278,13 +279,13 @@ public class TiledMap
 
         if (attrVisible != null) tiledLayer.IsVisible = attrVisible.Value == "1";
         if (attrLocked != null) tiledLayer.IsLocked = attrLocked.Value == "1";
-        if (attrTint != null) tiledLayer.TintColor = attrTint.Value;
+        if (attrTint != null) tiledLayer.TintColor = TiledUtilities.HexToColor(attrTint.Value);
         if (attrOffsetX != null) offsetX = float.Parse(attrOffsetX.Value);
         if (attrOffsetY != null) offsetY = float.Parse(attrOffsetY.Value);
         if (attrParallaxX != null) parallaxX = float.Parse(attrParallaxX.Value);
         if (attrParallaxY != null) parallaxY = float.Parse(attrParallaxY.Value);
         if (nodesProperty != null) tiledLayer.Properties = ParseProperties(nodesProperty);
-        
+
         tiledLayer.Offset = new PointF(offsetX, offsetY);
         tiledLayer.Parallax = new PointF(parallaxX, parallaxY);
 
@@ -493,7 +494,7 @@ public class TiledMap
 
         if (attrVisible != null) tiledLayer.IsVisible = attrVisible.Value == "1";
         if (attrLocked != null) tiledLayer.IsLocked = attrLocked.Value == "1";
-        if (attrTint != null) tiledLayer.TintColor = attrTint.Value;
+        if (attrTint != null) tiledLayer.TintColor = TiledUtilities.HexToColor(attrTint.Value);
         if (attrOffsetX != null) offsetX = int.Parse(attrOffsetX.Value);
         if (attrOffsetY != null) offsetY = int.Parse(attrOffsetY.Value);
         if (nodesProperty != null) tiledLayer.Properties = ParseProperties(nodesProperty);
@@ -524,14 +525,13 @@ public class TiledMap
 
         if (attrVisible != null) tiledLayer.IsVisible = attrVisible.Value == "1";
         if (attrLocked != null) tiledLayer.IsLocked = attrLocked.Value == "1";
-        if (attrTint != null) tiledLayer.TintColor = attrTint.Value;
+        if (attrTint != null) tiledLayer.TintColor = TiledUtilities.HexToColor(attrTint.Value);
         if (attrOffsetX != null) offsetX = int.Parse(attrOffsetX.Value);
         if (attrOffsetY != null) offsetY = int.Parse(attrOffsetY.Value);
         if (nodesProperty != null) tiledLayer.Properties = ParseProperties(nodesProperty);
         if (nodeImage != null) tiledLayer.Image = ParseImage(nodeImage);
 
         tiledLayer.Offset = new PointF(offsetX, offsetY);
-
         return tiledLayer;
     }
 
