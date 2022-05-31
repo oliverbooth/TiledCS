@@ -1,4 +1,7 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 
 namespace TiledCS;
 
@@ -7,10 +10,18 @@ namespace TiledCS;
 /// </summary>
 public sealed class TiledLayer
 {
+    private TiledChunk[] _chunks = Array.Empty<TiledChunk>();
+    private TiledObject[] _objects = Array.Empty<TiledObject>();
+    private TiledProperty[] _properties = Array.Empty<TiledProperty>();
+
     /// <summary>
     ///     Gets the chunks of data when the map is infinite.
     /// </summary>
-    public TiledChunk[] Chunks { get; internal set; }
+    public IReadOnlyList<TiledChunk> Chunks
+    {
+        get => _chunks[..];
+        internal set => _chunks = value.ToArray();
+    }
 
     /// <summary>
     ///     An int array of gid numbers which define which tile is being used where. The length of the array equals the layer width * the
@@ -50,7 +61,11 @@ public sealed class TiledLayer
     /// <summary>
     ///     Gets the list of objects in case of an objectgroup layer. Is null when the layer has no objects..
     /// </summary>
-    public TiledObject[] Objects { get; internal set; }
+    public IReadOnlyCollection<TiledObject> Objects
+    {
+        get => _objects[..];
+        internal set => _objects = value.ToArray();
+    }
 
     /// <summary>
     ///     Gets the layer's offset.
@@ -67,7 +82,11 @@ public sealed class TiledLayer
     /// <summary>
     ///     Gets the layer properties if set.
     /// </summary>
-    public TiledProperty[] Properties { get; internal set; }
+    public IReadOnlyCollection<TiledProperty> Properties
+    {
+        get => _properties[..];
+        internal set => _properties = value.ToArray();
+    }
 
     /// <summary>
     ///     Gets the layer's tint color.

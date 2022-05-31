@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Xml;
 using TiledCS.Shapes;
 
@@ -23,6 +24,12 @@ public sealed class TiledMap
     ///     For example: 0b10100000000000000000000000000000 >> SHIFT_FLIP_FLAG_TO_BYTE = 0b00000101
     /// </summary>
     private const int ShiftFlipFlagToByte = 29;
+
+    private TiledProperty[] _properties = Array.Empty<TiledProperty>();
+    private TiledMapTileset[] _tilesets = Array.Empty<TiledMapTileset>();
+    private TiledLayer[] _layers = Array.Empty<TiledLayer>();
+    private TiledGroup[] _groups = Array.Empty<TiledGroup>();
+
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="TiledMap" /> class.
@@ -52,65 +59,81 @@ public sealed class TiledMap
     /// <summary>
     ///     Returns the Tiled version used to create this map
     /// </summary>
-    public string Version { get; set; }
+    public string Version { get; private set; }
 
     /// <summary>
     ///     Returns an array of properties defined in the map
     /// </summary>
-    public TiledProperty[] Properties { get; set; }
+    public IReadOnlyList<TiledProperty> Properties
+    {
+        get => _properties[..];
+        private set => _properties = value.ToArray();
+    }
 
     /// <summary>
     ///     Returns an array of tileset definitions in the map
     /// </summary>
-    public TiledMapTileset[] Tilesets { get; set; }
+    public IReadOnlyList<TiledMapTileset> Tilesets
+    {
+        get => _tilesets[..];
+        private set => _tilesets = value.ToArray();
+    }
 
     /// <summary>
     ///     Returns an array of layers or null if none were defined
     /// </summary>
-    public TiledLayer[] Layers { get; set; }
+    public IReadOnlyList<TiledLayer> Layers
+    {
+        get => _layers[..];
+        private set => _layers = value.ToArray();
+    }
 
     /// <summary>
     ///     Returns an array of groups or null if none were defined
     /// </summary>
-    public TiledGroup[] Groups { get; set; }
+    public IReadOnlyList<TiledGroup> Groups
+    {
+        get => _groups[..];
+        private set => _groups = value.ToArray();
+    }
 
     /// <summary>
     ///     Returns the defined map orientation as a string
     /// </summary>
-    public TiledMapOrientation Orientation { get; set; }
+    public TiledMapOrientation Orientation { get; private set; }
 
     /// <summary>
     ///     Returns the render order as a string
     /// </summary>
-    public string RenderOrder { get; set; }
+    public string RenderOrder { get; private set; }
 
     /// <summary>
     ///     Gets the size of the map.
     /// </summary>
     /// <value>The size, measured in tiles.</value>
-    public Size Size { get; internal set; }
+    public Size Size { get; private set; }
 
     /// <summary>
     ///     Gets the size of a tile in the map.
     /// </summary>
     /// <value>The tile size, measured in pixels.</value>
-    public Size TileSize { get; internal set; }
+    public Size TileSize { get; private set; }
 
     /// <summary>
     ///     Gets the parallax origin.
     /// </summary>
     /// <value>The parallax origin.</value>
-    public PointF ParallaxOrigin { get; internal set; }
+    public PointF ParallaxOrigin { get; private set; }
 
     /// <summary>
     ///     Returns true if the map is configured as infinite
     /// </summary>
-    public bool Infinite { get; set; }
+    public bool Infinite { get; private set; }
 
     /// <summary>
     ///     Returns the defined map background color as a hex string
     /// </summary>
-    public Color? BackgroundColor { get; set; }
+    public Color? BackgroundColor { get; private set; }
 
     /// <summary>
     ///     Can be used to parse the content of a TMX map manually instead of loading it using the constructor
@@ -643,9 +666,9 @@ public sealed class TiledMap
     {
         if (Tilesets == null) return null;
 
-        for (var i = 0; i < Tilesets.Length; i++)
+        for (var i = 0; i < Tilesets.Count; i++)
         {
-            if (i < Tilesets.Length - 1)
+            if (i < Tilesets.Count - 1)
             {
                 int gid1 = Tilesets[i + 0].FirstGid;
                 int gid2 = Tilesets[i + 1].FirstGid;
@@ -673,7 +696,8 @@ public sealed class TiledMap
         var info = new FileInfo(src);
         DirectoryInfo srcFolder = info.Directory;
 
-        if (Tilesets == null) return tilesets;
+        if (Tilesets == null)
+            return tilesets;
 
         foreach (TiledMapTileset mapTileset in Tilesets)
         {
@@ -682,10 +706,8 @@ public sealed class TiledMap
             if (File.Exists(path))
                 tilesets.Add(mapTileset.FirstGid, new TiledTileset(path));
             else
-            {
-                throw new TiledException("Cannot locate tileset '" + path +
-                                         "'. Please make sure the source folder is correct and it ends with a slash.");
-            }
+                throw new TiledException($"Cannot locate tileset '{path}'. " +
+                                         "Please make sure the source folder is correct and it ends with a slash.");
         }
 
         return tilesets;
@@ -708,41 +730,6 @@ public sealed class TiledMap
         {
             if (tile.Id == gid - mapTileset.FirstGid)
                 return tile;
-        }
-
-        return null;
-    }
-
-    /// <summary>
-    ///     This method can be used to figure out the x and y position on a Tileset image for rendering tiles.
-    /// </summary>
-    /// <param name="mapTileset">An element of the Tilesets array</param>
-    /// <param name="tileset">An instance of the TiledTileset class</param>
-    /// <param name="gid">An element within a TiledLayer.data array</param>
-    /// <returns>
-    ///     An int array of length 2 containing the x and y position of the source rect of the tileset image. Multiply the values by
-    ///     the tile width and height in pixels to get the actual x and y position. Returns null if the gid was not found
-    /// </returns>
-    /// <remarks>This method currently doesn't take margin into account</remarks>
-    [Obsolete(
-        "Please use GetSourceRect instead because with future versions of Tiled this method may no longer be sufficient")]
-    public int[] GetSourceVector(TiledMapTileset mapTileset, TiledTileset tileset, int gid)
-    {
-        var tileHor = 0;
-        var tileVert = 0;
-
-        for (var i = 0; i < tileset.TileCount; i++)
-        {
-            if (i == gid - mapTileset.FirstGid) return new[] {tileHor, tileVert};
-
-            // Update x and y position
-            tileHor++;
-
-            if (tileHor == tileset.Image.Width / tileset.TileWidth)
-            {
-                tileHor = 0;
-                tileVert++;
-            }
         }
 
         return null;
