@@ -77,7 +77,7 @@ public class TiledMap
     /// <summary>
     ///     Returns the defined map orientation as a string
     /// </summary>
-    public string Orientation { get; set; }
+    public TiledMapOrientation Orientation { get; set; }
 
     /// <summary>
     ///     Returns the render order as a string
@@ -136,7 +136,9 @@ public class TiledMap
             XmlAttribute attrParallaxOriginY = nodeMap.Attributes["parallaxoriginy"];
 
             Version = nodeMap.Attributes["tiledversion"].Value;
-            Orientation = nodeMap.Attributes["orientation"].Value;
+            Orientation = Enum.TryParse(nodeMap.Attributes["orientation"].Value, true, out TiledMapOrientation orientation)
+                ? orientation
+                : TiledMapOrientation.Orthogonal;
             RenderOrder = nodeMap.Attributes["renderorder"].Value;
             if (nodeMap.Attributes["backgroundcolor"]?.Value is { } backgroundColor)
                 BackgroundColor = TiledUtilities.HexToColor(backgroundColor);
