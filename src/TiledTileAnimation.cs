@@ -1,4 +1,6 @@
-﻿namespace TiledCS;
+﻿using System;
+
+namespace TiledCS;
 
 /// <summary>
 ///     Represents a tile animation. Tile animations are a group of tiles which act as frames for an animation.
@@ -6,9 +8,10 @@
 public sealed class TiledTileAnimation
 {
     /// <summary>
-    ///     Gets the duration in miliseconds.
+    ///     Gets the duration of the animation.
     /// </summary>
-    public int Duration { get; internal set; }
+    /// <value>A <see cref="TimeSpan" /> representing the duration.</value>
+    public TimeSpan Duration { get; internal set; }
 
     /// <summary>
     ///     Gets the tile id within a tileset.

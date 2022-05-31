@@ -152,7 +152,7 @@ public sealed class TiledTileset
         {
             var animation = new TiledTileAnimation();
             animation.TileId = int.Parse(node.Attributes["tileid"].Value);
-            animation.Duration = int.Parse(node.Attributes["duration"].Value);
+            animation.Duration = TimeSpan.FromMilliseconds(long.Parse(node.Attributes["duration"].Value));
 
             result.Add(animation);
         }
