@@ -8,7 +8,7 @@ using System.Xml;
 namespace TiledCS
 {
     /// <summary>
-    ///     Represents a Tiled map
+    ///     Represents a Tiled map.
     /// </summary>
     public class TiledMap
     {
@@ -23,16 +23,16 @@ namespace TiledCS
         private const int ShiftFlipFlagToByte = 29;
 
         /// <summary>
-        ///     Returns an empty instance of TiledMap
+        ///     Initializes a new instance of the <see cref="TiledMap" /> class.
         /// </summary>
         public TiledMap()
         {
         }
 
         /// <summary>
-        ///     Loads a Tiled map in TMX format and parses it
+        ///     Initializes a new instance of the <see cref="TiledMap" /> class by loading the map from the specified file.
         /// </summary>
-        /// <param name="path">The path to the tmx file</param>
+        /// <param name="path">The path to the TMX file.</param>
         /// <exception cref="TiledException">Thrown when the map could not be loaded or is not in a correct format</exception>
         public TiledMap(string path)
         {
@@ -83,32 +83,32 @@ namespace TiledCS
         public string RenderOrder { get; set; }
 
         /// <summary>
-        ///     The amount of horizontal tiles
+        ///     Gets the amount of horizontal tiles.
         /// </summary>
         public int Width { get; set; }
 
         /// <summary>
-        ///     The amount of vertical tiles
+        ///     Gets the amount of vertical tiles.
         /// </summary>
         public int Height { get; set; }
 
         /// <summary>
-        ///     The tile width in pixels
+        ///     Gets the tile width in pixels.
         /// </summary>
         public int TileWidth { get; set; }
 
         /// <summary>
-        ///     The tile height in pixels
+        ///     Gets the tile height in pixels.
         /// </summary>
         public int TileHeight { get; set; }
 
         /// <summary>
-        ///     The parallax origin x
+        ///     Gets the parallax origin x.
         /// </summary>
         public float ParallaxOriginX { get; set; }
 
         /// <summary>
-        ///     The parallax origin y
+        ///     Gets the parallax origin y.
         /// </summary>
         public float ParallaxOriginY { get; set; }
 

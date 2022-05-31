@@ -7,21 +7,21 @@ using System.Xml;
 namespace TiledCS
 {
     /// <summary>
-    ///     Represents a Tiled tileset
+    ///     Represents a Tiled tileset.
     /// </summary>
     public class TiledTileset
     {
         /// <summary>
-        ///     Returns an empty instance of TiledTileset
+        ///     Initializes a new instance of the <see cref="TiledTileset" /> class.
         /// </summary>
         public TiledTileset()
         {
         }
 
         /// <summary>
-        ///     Loads a tileset in TSX format and parses it
+        ///     Initializes a new instance of the <see cref="TiledTileset" /> class by loading a tileset from the specified file.
         /// </summary>
-        /// <param name="path">The file path of the TSX file</param>
+        /// <param name="path">The file path of the TSX file.</param>
         /// <exception cref="TiledException">Thrown when the file could not be found or parsed</exception>
         public TiledTileset(string path)
         {
@@ -37,47 +37,47 @@ namespace TiledCS
         }
 
         /// <summary>
-        ///     The Tiled version used to create this tileset
+        ///     Gets the Tiled version used to create this tileset.
         /// </summary>
         public string Version { get; set; }
 
         /// <summary>
-        ///     The tileset name
+        ///     Gets the tileset name.
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        ///     The tile width in pixels
+        ///     Gets the tile width in pixels.
         /// </summary>
         public int TileWidth { get; set; }
 
         /// <summary>
-        ///     The tile height in pixels
+        ///     Gets the tile height in pixels.
         /// </summary>
         public int TileHeight { get; set; }
 
         /// <summary>
-        ///     The total amount of tiles
+        ///     Gets the total amount of tiles.
         /// </summary>
         public int TileCount { get; set; }
 
         /// <summary>
-        ///     The amount of horizontal tiles
+        ///     Gets the amount of horizontal tiles.
         /// </summary>
         public int Columns { get; set; }
 
         /// <summary>
-        ///     The image definition used by the tileset
+        ///     Gets the image definition used by the tileset.
         /// </summary>
         public TiledImage Image { get; set; }
 
         /// <summary>
-        ///     The amount of spacing between the tiles in pixels
+        ///     Gets the amount of spacing between the tiles in pixels.
         /// </summary>
         public int Spacing { get; set; }
 
         /// <summary>
-        ///     The amount of margin between the tiles in pixels
+        ///     Gets the amount of margin between the tiles in pixels.
         /// </summary>
         public int Margin { get; set; }
 
