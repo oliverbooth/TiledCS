@@ -178,11 +178,11 @@ namespace TiledCS
             foreach (XmlNode node in nodeList)
             {
                 var property = new TiledProperty();
-                property.name = node.Attributes["name"].Value;
-                property.type = node.Attributes["type"]?.Value;
-                property.value = node.Attributes["value"]?.Value;
+                property.Name = node.Attributes["name"].Value;
+                property.Type = node.Attributes["type"]?.Value;
+                property.Value = node.Attributes["value"]?.Value;
 
-                if (property.value == null && node.InnerText != null) property.value = node.InnerText;
+                if (property.Value == null && node.InnerText != null) property.Value = node.InnerText;
 
                 result.Add(property);
             }
@@ -197,8 +197,8 @@ namespace TiledCS
             foreach (XmlNode node in nodeList)
             {
                 var tileset = new TiledMapTileset();
-                tileset.firstgid = int.Parse(node.Attributes["firstgid"].Value);
-                tileset.source = node.Attributes["source"].Value;
+                tileset.FirstGid = int.Parse(node.Attributes["firstgid"].Value);
+                tileset.Source = node.Attributes["source"].Value;
 
                 result.Add(tileset);
             }
@@ -221,14 +221,14 @@ namespace TiledCS
                 XmlAttribute attrLocked = node.Attributes["locked"];
 
                 var tiledGroup = new TiledGroup();
-                tiledGroup.id = int.Parse(node.Attributes["id"].Value);
-                tiledGroup.name = node.Attributes["name"].Value;
+                tiledGroup.Id = int.Parse(node.Attributes["id"].Value);
+                tiledGroup.Name = node.Attributes["name"].Value;
 
-                if (attrVisible != null) tiledGroup.visible = attrVisible.Value == "1";
-                if (attrLocked != null) tiledGroup.locked = attrLocked.Value == "1";
-                if (nodesProperty != null) tiledGroup.properties = ParseProperties(nodesProperty);
-                if (nodesGroup != null) tiledGroup.groups = ParseGroups(nodesGroup);
-                if (nodesLayer != null) tiledGroup.layers = ParseLayers(nodesLayer, nodesObjectGroup, nodesImageLayer);
+                if (attrVisible != null) tiledGroup.IsVisible = attrVisible.Value == "1";
+                if (attrLocked != null) tiledGroup.IsLocked = attrLocked.Value == "1";
+                if (nodesProperty != null) tiledGroup.Properties = ParseProperties(nodesProperty);
+                if (nodesGroup != null) tiledGroup.Groups = ParseGroups(nodesGroup);
+                if (nodesLayer != null) tiledGroup.Layers = ParseLayers(nodesLayer, nodesObjectGroup, nodesImageLayer);
 
                 result.Add(tiledGroup);
             }
@@ -262,21 +262,21 @@ namespace TiledCS
             XmlAttribute attrParallaxY = node.Attributes["parallaxy"];
 
             var tiledLayer = new TiledLayer();
-            tiledLayer.id = int.Parse(node.Attributes["id"].Value);
-            tiledLayer.name = node.Attributes["name"].Value;
-            tiledLayer.height = int.Parse(node.Attributes["height"].Value);
-            tiledLayer.width = int.Parse(node.Attributes["width"].Value);
-            tiledLayer.type = TiledLayerType.TileLayer;
-            tiledLayer.visible = true;
+            tiledLayer.Id = int.Parse(node.Attributes["id"].Value);
+            tiledLayer.Name = node.Attributes["name"].Value;
+            tiledLayer.Height = int.Parse(node.Attributes["height"].Value);
+            tiledLayer.Width = int.Parse(node.Attributes["width"].Value);
+            tiledLayer.Type = TiledLayerType.TileLayer;
+            tiledLayer.IsVisible = true;
 
-            if (attrVisible != null) tiledLayer.visible = attrVisible.Value == "1";
-            if (attrLocked != null) tiledLayer.locked = attrLocked.Value == "1";
-            if (attrTint != null) tiledLayer.tintcolor = attrTint.Value;
-            if (attrOffsetX != null) tiledLayer.offsetX = float.Parse(attrOffsetX.Value);
-            if (attrOffsetY != null) tiledLayer.offsetY = float.Parse(attrOffsetY.Value);
-            if (attrParallaxX != null) tiledLayer.offsetX = float.Parse(attrParallaxX.Value);
-            if (attrParallaxY != null) tiledLayer.offsetY = float.Parse(attrParallaxY.Value);
-            if (nodesProperty != null) tiledLayer.properties = ParseProperties(nodesProperty);
+            if (attrVisible != null) tiledLayer.IsVisible = attrVisible.Value == "1";
+            if (attrLocked != null) tiledLayer.IsLocked = attrLocked.Value == "1";
+            if (attrTint != null) tiledLayer.TintColor = attrTint.Value;
+            if (attrOffsetX != null) tiledLayer.OffsetX = float.Parse(attrOffsetX.Value);
+            if (attrOffsetY != null) tiledLayer.OffsetY = float.Parse(attrOffsetY.Value);
+            if (attrParallaxX != null) tiledLayer.OffsetX = float.Parse(attrParallaxX.Value);
+            if (attrParallaxY != null) tiledLayer.OffsetY = float.Parse(attrParallaxY.Value);
+            if (nodesProperty != null) tiledLayer.Properties = ParseProperties(nodesProperty);
 
             ParseTileLayerData(nodeData, ref tiledLayer);
 
@@ -299,28 +299,53 @@ namespace TiledCS
                 foreach (XmlNode nodeChunk in nodesChunk)
                 {
                     var chunk = new TiledChunk();
-                    chunk.x = int.Parse(nodeChunk.Attributes["x"].Value);
-                    chunk.y = int.Parse(nodeChunk.Attributes["y"].Value);
-                    chunk.width = int.Parse(nodeChunk.Attributes["width"].Value);
-                    chunk.height = int.Parse(nodeChunk.Attributes["height"].Value);
+                    chunk.X = int.Parse(nodeChunk.Attributes["x"].Value);
+                    chunk.Y = int.Parse(nodeChunk.Attributes["y"].Value);
+                    chunk.Width = int.Parse(nodeChunk.Attributes["width"].Value);
+                    chunk.Height = int.Parse(nodeChunk.Attributes["height"].Value);
 
                     if (encoding == "csv")
-                        ParseTileLayerDataAsCsv(nodeChunk.InnerText, ref chunk.data, ref chunk.dataRotationFlags);
+                    {
+                        int[] data = chunk.Data;
+                        byte[] rotationFlags = chunk.DataRotationFlags;
+                        ParseTileLayerDataAsCsv(nodeChunk.InnerText, ref data, ref rotationFlags);
+                        chunk.Data = data;
+                        chunk.DataRotationFlags = rotationFlags;
+                    }
+
                     if (encoding == "base64")
-                        ParseTileLayerDataAsBase64(nodeChunk.InnerText, compression, ref chunk.data, ref chunk.dataRotationFlags);
+                    {
+                        int[] data = chunk.Data;
+                        byte[] rotationFlags = chunk.DataRotationFlags;
+                        ParseTileLayerDataAsBase64(nodeChunk.InnerText, compression, ref data, ref rotationFlags);
+                        chunk.Data = data;
+                        chunk.DataRotationFlags = rotationFlags;
+                    }
 
                     chunks.Add(chunk);
                 }
 
-                tiledLayer.chunks = chunks.ToArray();
+                tiledLayer.Chunks = chunks.ToArray();
             }
             else
             {
                 if (encoding == "csv")
-                    ParseTileLayerDataAsCsv(nodeData.InnerText, ref tiledLayer.data, ref tiledLayer.dataRotationFlags);
+                {
+                    int[] data = tiledLayer.Data;
+                    byte[] rotationFlags = tiledLayer.DataRotationFlags;
+                    ParseTileLayerDataAsCsv(nodeData.InnerText, ref data, ref rotationFlags);
+                    tiledLayer.Data = data;
+                    tiledLayer.DataRotationFlags = rotationFlags;
+                }
+
                 if (encoding == "base64")
-                    ParseTileLayerDataAsBase64(nodeData.InnerText, compression, ref tiledLayer.data,
-                        ref tiledLayer.dataRotationFlags);
+                {
+                    int[] data = tiledLayer.Data;
+                    byte[] rotationFlags = tiledLayer.DataRotationFlags;
+                    ParseTileLayerDataAsBase64(nodeData.InnerText, compression, ref data, ref rotationFlags);
+                    tiledLayer.Data = data;
+                    tiledLayer.DataRotationFlags = rotationFlags;
+                }
             }
         }
 
@@ -447,18 +472,18 @@ namespace TiledCS
             XmlAttribute attrOffsetY = node.Attributes["offsety"];
 
             var tiledLayer = new TiledLayer();
-            tiledLayer.id = int.Parse(node.Attributes["id"].Value);
-            tiledLayer.name = node.Attributes["name"].Value;
-            tiledLayer.objects = ParseObjects(nodesObject);
-            tiledLayer.type = TiledLayerType.ObjectLayer;
-            tiledLayer.visible = true;
+            tiledLayer.Id = int.Parse(node.Attributes["id"].Value);
+            tiledLayer.Name = node.Attributes["name"].Value;
+            tiledLayer.Objects = ParseObjects(nodesObject);
+            tiledLayer.Type = TiledLayerType.ObjectLayer;
+            tiledLayer.IsVisible = true;
 
-            if (attrVisible != null) tiledLayer.visible = attrVisible.Value == "1";
-            if (attrLocked != null) tiledLayer.locked = attrLocked.Value == "1";
-            if (attrTint != null) tiledLayer.tintcolor = attrTint.Value;
-            if (attrOffsetX != null) tiledLayer.offsetX = int.Parse(attrOffsetX.Value);
-            if (attrOffsetY != null) tiledLayer.offsetY = int.Parse(attrOffsetY.Value);
-            if (nodesProperty != null) tiledLayer.properties = ParseProperties(nodesProperty);
+            if (attrVisible != null) tiledLayer.IsVisible = attrVisible.Value == "1";
+            if (attrLocked != null) tiledLayer.IsLocked = attrLocked.Value == "1";
+            if (attrTint != null) tiledLayer.TintColor = attrTint.Value;
+            if (attrOffsetX != null) tiledLayer.OffsetX = int.Parse(attrOffsetX.Value);
+            if (attrOffsetY != null) tiledLayer.OffsetY = int.Parse(attrOffsetY.Value);
+            if (nodesProperty != null) tiledLayer.Properties = ParseProperties(nodesProperty);
 
             return tiledLayer;
         }
@@ -474,18 +499,18 @@ namespace TiledCS
             XmlAttribute attrOffsetY = node.Attributes["offsety"];
 
             var tiledLayer = new TiledLayer();
-            tiledLayer.id = int.Parse(node.Attributes["id"].Value);
-            tiledLayer.name = node.Attributes["name"].Value;
-            tiledLayer.type = TiledLayerType.ImageLayer;
-            tiledLayer.visible = true;
+            tiledLayer.Id = int.Parse(node.Attributes["id"].Value);
+            tiledLayer.Name = node.Attributes["name"].Value;
+            tiledLayer.Type = TiledLayerType.ImageLayer;
+            tiledLayer.IsVisible = true;
 
-            if (attrVisible != null) tiledLayer.visible = attrVisible.Value == "1";
-            if (attrLocked != null) tiledLayer.locked = attrLocked.Value == "1";
-            if (attrTint != null) tiledLayer.tintcolor = attrTint.Value;
-            if (attrOffsetX != null) tiledLayer.offsetX = int.Parse(attrOffsetX.Value);
-            if (attrOffsetY != null) tiledLayer.offsetY = int.Parse(attrOffsetY.Value);
-            if (nodesProperty != null) tiledLayer.properties = ParseProperties(nodesProperty);
-            if (nodeImage != null) tiledLayer.image = ParseImage(nodeImage);
+            if (attrVisible != null) tiledLayer.IsVisible = attrVisible.Value == "1";
+            if (attrLocked != null) tiledLayer.IsLocked = attrLocked.Value == "1";
+            if (attrTint != null) tiledLayer.TintColor = attrTint.Value;
+            if (attrOffsetX != null) tiledLayer.OffsetX = int.Parse(attrOffsetX.Value);
+            if (attrOffsetY != null) tiledLayer.OffsetY = int.Parse(attrOffsetY.Value);
+            if (nodesProperty != null) tiledLayer.Properties = ParseProperties(nodesProperty);
+            if (nodeImage != null) tiledLayer.Image = ParseImage(nodeImage);
 
             return tiledLayer;
         }
@@ -493,9 +518,9 @@ namespace TiledCS
         private TiledImage ParseImage(XmlNode node)
         {
             var tiledImage = new TiledImage();
-            tiledImage.source = node.Attributes["source"].Value;
-            tiledImage.width = int.Parse(node.Attributes["width"].Value);
-            tiledImage.height = int.Parse(node.Attributes["height"].Value);
+            tiledImage.Source = node.Attributes["source"].Value;
+            tiledImage.Width = int.Parse(node.Attributes["width"].Value);
+            tiledImage.Height = int.Parse(node.Attributes["height"].Value);
 
             return tiledImage;
         }
@@ -512,14 +537,14 @@ namespace TiledCS
                 XmlNode nodeEllipse = node.SelectSingleNode("ellipse");
 
                 var obj = new TiledObject();
-                obj.id = int.Parse(node.Attributes["id"].Value);
-                obj.name = node.Attributes["name"]?.Value;
-                obj.type = node.Attributes["type"]?.Value;
-                obj.gid = int.Parse(node.Attributes["gid"]?.Value ?? "0");
-                obj.x = float.Parse(node.Attributes["x"].Value, CultureInfo.InvariantCulture);
-                obj.y = float.Parse(node.Attributes["y"].Value, CultureInfo.InvariantCulture);
+                obj.Id = int.Parse(node.Attributes["id"].Value);
+                obj.Name = node.Attributes["name"]?.Value;
+                obj.Type = node.Attributes["type"]?.Value;
+                obj.Gid = int.Parse(node.Attributes["gid"]?.Value ?? "0");
+                obj.X = float.Parse(node.Attributes["x"].Value, CultureInfo.InvariantCulture);
+                obj.Y = float.Parse(node.Attributes["y"].Value, CultureInfo.InvariantCulture);
 
-                if (nodesProperty != null) obj.properties = ParseProperties(nodesProperty);
+                if (nodesProperty != null) obj.Properties = ParseProperties(nodesProperty);
 
                 if (nodePolygon != null)
                 {
@@ -527,31 +552,31 @@ namespace TiledCS
                     string[] vertices = points.Split(' ');
 
                     var polygon = new TiledPolygon();
-                    polygon.points = new float[vertices.Length * 2];
+                    polygon.Points = new float[vertices.Length * 2];
 
                     for (var i = 0; i < vertices.Length; i++)
                     {
-                        polygon.points[i * 2 + 0] =
+                        polygon.Points[i * 2 + 0] =
                             float.Parse(vertices[i].Split(',')[0], CultureInfo.InvariantCulture);
-                        polygon.points[i * 2 + 1] =
+                        polygon.Points[i * 2 + 1] =
                             float.Parse(vertices[i].Split(',')[1], CultureInfo.InvariantCulture);
                     }
 
-                    obj.polygon = polygon;
+                    obj.Polygon = polygon;
                 }
 
-                if (nodeEllipse != null) obj.ellipse = new TiledEllipse();
+                if (nodeEllipse != null) obj.Ellipse = new TiledEllipse();
 
-                if (nodePoint != null) obj.point = new TiledPoint();
+                if (nodePoint != null) obj.Point = new TiledPoint();
 
                 if (node.Attributes["width"] != null)
-                    obj.width = float.Parse(node.Attributes["width"].Value, CultureInfo.InvariantCulture);
+                    obj.Width = float.Parse(node.Attributes["width"].Value, CultureInfo.InvariantCulture);
 
                 if (node.Attributes["height"] != null)
-                    obj.height = float.Parse(node.Attributes["height"].Value, CultureInfo.InvariantCulture);
+                    obj.Height = float.Parse(node.Attributes["height"].Value, CultureInfo.InvariantCulture);
 
                 if (node.Attributes["rotation"] != null)
-                    obj.rotation = float.Parse(node.Attributes["rotation"].Value, CultureInfo.InvariantCulture);
+                    obj.Rotation = float.Parse(node.Attributes["rotation"].Value, CultureInfo.InvariantCulture);
 
                 result.Add(obj);
             }
@@ -573,8 +598,8 @@ namespace TiledCS
             {
                 if (i < Tilesets.Length - 1)
                 {
-                    int gid1 = Tilesets[i + 0].firstgid;
-                    int gid2 = Tilesets[i + 1].firstgid;
+                    int gid1 = Tilesets[i + 0].FirstGid;
+                    int gid2 = Tilesets[i + 1].FirstGid;
 
                     if (gid >= gid1 && gid < gid2) return Tilesets[i];
                 }
@@ -603,10 +628,10 @@ namespace TiledCS
 
             foreach (TiledMapTileset mapTileset in Tilesets)
             {
-                var path = $"{srcFolder}/{mapTileset.source}";
+                var path = $"{srcFolder}/{mapTileset.Source}";
 
                 if (File.Exists(path))
-                    tilesets.Add(mapTileset.firstgid, new TiledTileset(path));
+                    tilesets.Add(mapTileset.FirstGid, new TiledTileset(path));
                 else
                     throw new TiledException("Cannot locate tileset '" + path +
                                              "'. Please make sure the source folder is correct and it ends with a slash.");
@@ -630,7 +655,7 @@ namespace TiledCS
         {
             foreach (TiledTile tile in tileset.Tiles)
             {
-                if (tile.id == gid - mapTileset.firstgid) return tile;
+                if (tile.Id == gid - mapTileset.FirstGid) return tile;
             }
 
             return null;
@@ -656,12 +681,12 @@ namespace TiledCS
 
             for (var i = 0; i < tileset.TileCount; i++)
             {
-                if (i == gid - mapTileset.firstgid) return new[] {tileHor, tileVert};
+                if (i == gid - mapTileset.FirstGid) return new[] {tileHor, tileVert};
 
                 // Update x and y position
                 tileHor++;
 
-                if (tileHor == tileset.Image.width / tileset.TileWidth)
+                if (tileHor == tileset.Image.Width / tileset.TileWidth)
                 {
                     tileHor = 0;
                     tileVert++;
@@ -688,13 +713,13 @@ namespace TiledCS
 
             for (var i = 0; i < tileset.TileCount; i++)
             {
-                if (i == gid - mapTileset.firstgid)
+                if (i == gid - mapTileset.FirstGid)
                 {
                     var result = new TiledSourceRect();
-                    result.x = tileHor * tileset.TileWidth;
-                    result.y = tileVert * tileset.TileHeight;
-                    result.width = tileset.TileWidth;
-                    result.height = tileset.TileHeight;
+                    result.X = tileHor * tileset.TileWidth;
+                    result.Y = tileVert * tileset.TileHeight;
+                    result.Width = tileset.TileWidth;
+                    result.Height = tileset.TileHeight;
 
                     return result;
                 }
@@ -702,7 +727,7 @@ namespace TiledCS
                 // Update x and y position
                 tileHor++;
 
-                if (tileHor == tileset.Image.width / tileset.TileWidth)
+                if (tileHor == tileset.Image.Width / tileset.TileWidth)
                 {
                     tileHor = 0;
                     tileVert++;
@@ -721,7 +746,7 @@ namespace TiledCS
         /// <returns>True if the tile was flipped horizontally or False if not</returns>
         public bool IsTileFlippedHorizontal(TiledLayer layer, int tileHor, int tileVert)
         {
-            return IsTileFlippedHorizontal(layer, tileHor + tileVert * layer.width);
+            return IsTileFlippedHorizontal(layer, tileHor + tileVert * layer.Width);
         }
 
         /// <summary>
@@ -732,7 +757,7 @@ namespace TiledCS
         /// <returns>True if the tile was flipped horizontally or False if not</returns>
         public bool IsTileFlippedHorizontal(TiledLayer layer, int dataIndex)
         {
-            return (layer.dataRotationFlags[dataIndex] & (FlippedHorizontallyFlag >> ShiftFlipFlagToByte)) > 0;
+            return (layer.DataRotationFlags[dataIndex] & (FlippedHorizontallyFlag >> ShiftFlipFlagToByte)) > 0;
         }
 
         /// <summary>
@@ -744,7 +769,7 @@ namespace TiledCS
         /// <returns>True if the tile was flipped vertically or False if not</returns>
         public bool IsTileFlippedVertical(TiledLayer layer, int tileHor, int tileVert)
         {
-            return IsTileFlippedVertical(layer, tileHor + tileVert * layer.width);
+            return IsTileFlippedVertical(layer, tileHor + tileVert * layer.Width);
         }
 
         /// <summary>
@@ -755,7 +780,7 @@ namespace TiledCS
         /// <returns>True if the tile was flipped vertically or False if not</returns>
         public bool IsTileFlippedVertical(TiledLayer layer, int dataIndex)
         {
-            return (layer.dataRotationFlags[dataIndex] & (FlippedVerticallyFlag >> ShiftFlipFlagToByte)) > 0;
+            return (layer.DataRotationFlags[dataIndex] & (FlippedVerticallyFlag >> ShiftFlipFlagToByte)) > 0;
         }
 
         /// <summary>
@@ -767,7 +792,7 @@ namespace TiledCS
         /// <returns>True if the tile was flipped diagonally or False if not</returns>
         public bool IsTileFlippedDiagonal(TiledLayer layer, int tileHor, int tileVert)
         {
-            return IsTileFlippedDiagonal(layer, tileHor + tileVert * layer.width);
+            return IsTileFlippedDiagonal(layer, tileHor + tileVert * layer.Width);
         }
 
         /// <summary>
@@ -778,7 +803,7 @@ namespace TiledCS
         /// <returns>True if the tile was flipped diagonally or False if not</returns>
         public bool IsTileFlippedDiagonal(TiledLayer layer, int dataIndex)
         {
-            return (layer.dataRotationFlags[dataIndex] & (FlippedDiagonallyFlag >> ShiftFlipFlagToByte)) > 0;
+            return (layer.DataRotationFlags[dataIndex] & (FlippedDiagonallyFlag >> ShiftFlipFlagToByte)) > 0;
         }
     }
 }

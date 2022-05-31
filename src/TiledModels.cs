@@ -9,12 +9,12 @@ namespace TiledCS
         ///     Gets the first GID, that is, the GID which matches the tile with source vector 0,0.
         /// </summary>
         /// <remarks>This value is used to determine which tileset belongs to which GID.</remarks>
-        public int firstgid;
+        public int FirstGid { get; internal set; }
 
         /// <summary>
         ///     Gets the tsx file path as defined in the map file itself.
         /// </summary>
-        public string source;
+        public string Source { get; internal set; }
     }
 
     /// <summary>
@@ -26,17 +26,17 @@ namespace TiledCS
         /// <summary>
         ///     Gets the property name or key in string format.
         /// </summary>
-        public string name;
+        public string Name { get; internal set; }
 
         /// <summary>
         ///     Gets the property type as used in Tiled. Can be bool, number, string, ....
         /// </summary>
-        public string type;
+        public string Type { get; internal set; }
 
         /// <summary>
         ///     Gets the value in string format.
         /// </summary>
-        public string value;
+        public string Value { get; internal set; }
     }
 
     /// <summary>
@@ -47,13 +47,13 @@ namespace TiledCS
         /// <summary>
         ///     Gets the chunks of data when the map is infinite.
         /// </summary>
-        public TiledChunk[] chunks;
+        public TiledChunk[] Chunks { get; internal set; }
 
         /// <summary>
         ///     An int array of gid numbers which define which tile is being used where. The length of the array equals the layer width * the
         ///     layer height. Is null when the layer is not a tilelayer.
         /// </summary>
-        public int[] data;
+        public int[] Data { get; internal set; }
 
         /// <summary>
         ///     A parallel array to data which stores the rotation flags of the tile.
@@ -62,81 +62,82 @@ namespace TiledCS
         ///     bit 1 is (anti) diagonal flip.
         ///     Is null when the layer is not a tilelayer.
         /// </summary>
-        public byte[] dataRotationFlags;
+        public byte[] DataRotationFlags { get; internal set; }
 
         /// <summary>
         ///     Total vertical tiles
         /// </summary>
-        public int height;
+        public int Height { get; internal set; }
+
         /// <summary>
         ///     Gets the layer id.
         /// </summary>
-        public int id;
+        public int Id { get; internal set; }
 
         /// <summary>
         ///     Gets the image the layer represents when the layer is an image layer.
         /// </summary>
-        public TiledImage image;
+        public TiledImage Image { get; internal set; }
 
         /// <summary>
         ///     Is true when the layer is locked
         /// </summary>
-        public bool locked;
+        public bool IsLocked { get; internal set; }
 
         /// <summary>
         ///     Gets the layer name.
         /// </summary>
-        public string name;
+        public string Name { get; internal set; }
 
         /// <summary>
         ///     Gets the list of objects in case of an objectgroup layer. Is null when the layer has no objects..
         /// </summary>
-        public TiledObject[] objects;
+        public TiledObject[] Objects { get; internal set; }
 
         /// <summary>
         ///     Gets the horizontal offset.
         /// </summary>
-        public float offsetX;
+        public float OffsetX { get; internal set; }
 
         /// <summary>
         ///     Gets the vertical offset.
         /// </summary>
-        public float offsetY;
+        public float OffsetY { get; internal set; }
 
         /// <summary>
         ///     Gets the parallax x position.
         /// </summary>
-        public float parallaxX;
+        public float ParallaxX { get; internal set; }
 
         /// <summary>
         ///     Gets the parallax y position.
         /// </summary>
-        public float parallaxY;
+        public float ParallaxY { get; internal set; }
 
         /// <summary>
         ///     Gets the layer properties if set.
         /// </summary>
-        public TiledProperty[] properties;
+        public TiledProperty[] Properties { get; internal set; }
 
         /// <summary>
         ///     Gets the tint color set by the user in hex code.
         /// </summary>
-        public string tintcolor;
+        public string TintColor { get; internal set; }
 
         /// <summary>
         ///     Gets the layer type..
         /// </summary>
-        public TiledLayerType type;
+        public TiledLayerType Type { get; internal set; }
 
         /// <summary>
         ///     Defines if the layer is visible in the editor
         /// </summary>
-        public bool visible;
+        public bool IsVisible { get; internal set; }
 
         /// <summary>
         ///     Total horizontal tiles
         /// </summary>
-        public int width;
+        public int Width { get; internal set; }
     }
 
     /// <summary>
@@ -147,66 +148,67 @@ namespace TiledCS
         /// <summary>
         ///     If an object was set to an ellipse shape, this property will be set
         /// </summary>
-        public TiledEllipse ellipse;
+        public TiledEllipse Ellipse { get; internal set; }
 
         /// <summary>
         ///     Gets the tileset gid when the object is linked to a tile.
         /// </summary>
-        public int gid;
+        public int Gid { get; internal set; }
 
         /// <summary>
         ///     Gets the object's height in pixels.
         /// </summary>
-        public float height;
+        public float Height { get; internal set; }
+
         /// <summary>
         ///     Gets the object id.
         /// </summary>
-        public int id;
+        public int Id { get; internal set; }
 
         /// <summary>
         ///     Gets the object's name.
         /// </summary>
-        public string name;
+        public string Name { get; internal set; }
 
         /// <summary>
         ///     If an object was set to a point shape, this property will be set
         /// </summary>
-        public TiledPoint point;
+        public TiledPoint Point { get; internal set; }
 
         /// <summary>
         ///     If an object was set to a polygon shape, this property will be set and can be used to access the polygon's data
         /// </summary>
-        public TiledPolygon polygon;
+        public TiledPolygon Polygon { get; internal set; }
 
         /// <summary>
         ///     An array of properties. Is null if none were defined.
         /// </summary>
-        public TiledProperty[] properties;
+        public TiledProperty[] Properties { get; internal set; }
 
         /// <summary>
         ///     Gets the object's rotation.
         /// </summary>
-        public float rotation;
+        public float Rotation { get; internal set; }
 
         /// <summary>
         ///     Gets the object type if defined. Null if none was set..
         /// </summary>
-        public string type;
+        public string Type { get; internal set; }
 
         /// <summary>
         ///     Gets the object's width in pixels.
         /// </summary>
-        public float width;
+        public float Width { get; internal set; }
 
         /// <summary>
         ///     Gets the object's x position in pixels.
         /// </summary>
-        public float x;
+        public float X { get; internal set; }
 
         /// <summary>
         ///     Gets the object's y position in pixels.
         /// </summary>
-        public float y;
+        public float Y { get; internal set; }
     }
 
     /// <summary>
@@ -217,7 +219,7 @@ namespace TiledCS
         /// <summary>
         ///     Gets the array of vertices where each two elements represent an x and y position. Like 'x,y,x,y,x,y,x,y'..
         /// </summary>
-        public float[] points;
+        public float[] Points { get; internal set; }
     }
 
     /// <summary>
@@ -243,26 +245,27 @@ namespace TiledCS
         /// <summary>
         ///     An array of tile animations. Is null if none were defined.
         /// </summary>
-        public TiledTileAnimation[] animation;
+        public TiledTileAnimation[] Animation { get; internal set; }
+
         /// <summary>
         ///     Gets the tile id.
         /// </summary>
-        public int id;
+        public int Id { get; internal set; }
 
         /// <summary>
         ///     Gets the individual tile image.
         /// </summary>
-        public TiledImage image;
+        public TiledImage Image { get; internal set; }
 
         /// <summary>
         ///     An array of tile objects created using the tile collision editor
         /// </summary>
-        public TiledObject[] objects;
+        public TiledObject[] Objects { get; internal set; }
 
         /// <summary>
         ///     An array of properties. Is null if none were defined.
         /// </summary>
-        public TiledProperty[] properties;
+        public TiledProperty[] Properties { get; internal set; }
 
         /// <summary>
         ///     Gets the terrain definitions as int array. These are indices indicating what part of a terrain and which terrain this tile.
@@ -272,12 +275,12 @@ namespace TiledCS
         ///     In the map file empty space is used to indicate null or no value. However, since it is an int array I needed something
         ///     so I decided to replace empty values with -1.
         /// </remarks>
-        public int[] terrain;
+        public int[] Terrain { get; internal set; }
 
         /// <summary>
         ///     Gets the custom tile type, set by the user.
         /// </summary>
-        public string type;
+        public string Type { get; internal set; }
     }
 
     /// <summary>
@@ -288,16 +291,17 @@ namespace TiledCS
         /// <summary>
         ///     Gets the image height.
         /// </summary>
-        public int height;
+        public int Height { get; internal set; }
 
         /// <summary>
         ///     Gets the image source path.
         /// </summary>
-        public string source;
+        public string Source { get; internal set; }
+
         /// <summary>
         ///     Gets the image width.
         /// </summary>
-        public int width;
+        public int Width { get; internal set; }
     }
 
     /// <summary>
@@ -308,11 +312,12 @@ namespace TiledCS
         /// <summary>
         ///     Gets the duration in miliseconds.
         /// </summary>
-        public int duration;
+        public int Duration { get; internal set; }
+
         /// <summary>
         ///     Gets the tile id within a tileset.
         /// </summary>
-        public int tileid;
+        public int TileId { get; internal set; }
     }
 
     /// <summary>
@@ -323,21 +328,22 @@ namespace TiledCS
         /// <summary>
         ///     Gets the height in pixels from the tile in the source image.
         /// </summary>
-        public int height;
+        public int Height { get; internal set; }
 
         /// <summary>
         ///     Gets the width in pixels from the tile in the source image.
         /// </summary>
-        public int width;
+        public int Width { get; internal set; }
+
         /// <summary>
         ///     Gets the x position in pixels from the tile location in the source image.
         /// </summary>
-        public int x;
+        public int X { get; internal set; }
 
         /// <summary>
         ///     Gets the y position in pixels from the tile location in the source image.
         /// </summary>
-        public int y;
+        public int Y { get; internal set; }
     }
 
     /// <summary>
@@ -348,41 +354,42 @@ namespace TiledCS
         /// <summary>
         ///     Gets the group's subgroups.
         /// </summary>
-        public TiledGroup[] groups;
+        public TiledGroup[] Groups { get; internal set; }
+
         /// <summary>
         ///     Gets the group's id.
         /// </summary>
-        public int id;
+        public int Id { get; internal set; }
 
         /// <summary>
         ///     Gets the group's layers.
         /// </summary>
-        public TiledLayer[] layers;
+        public TiledLayer[] Layers { get; internal set; }
 
         /// <summary>
         ///     Gets the group's locked state.
         /// </summary>
-        public bool locked;
+        public bool IsLocked { get; internal set; }
 
         /// <summary>
         ///     Gets the group's name.
         /// </summary>
-        public string name;
+        public string Name { get; internal set; }
 
         /// <summary>
         ///     Gets the group's objects.
         /// </summary>
-        public TiledObject[] objects;
+        public TiledObject[] Objects { get; internal set; }
 
         /// <summary>
         ///     Gets the group's user properties.
         /// </summary>
-        public TiledProperty[] properties;
+        public TiledProperty[] Properties { get; internal set; }
 
         /// <summary>
         ///     Gets the group's visibility.
         /// </summary>
-        public bool visible;
+        public bool IsVisible { get; internal set; }
     }
 
     /// <summary>
@@ -390,11 +397,16 @@ namespace TiledCS
     /// </summary>
     public class TiledChunk
     {
-        public int[] data;
-        public byte[] dataRotationFlags;
-        public int height;
-        public int width;
-        public int x;
-        public int y;
+        public int[] Data { get; internal set; }
+
+        public byte[] DataRotationFlags { get; internal set; }
+
+        public int Height { get; internal set; }
+
+        public int Width { get; internal set; }
+
+        public int X { get; internal set; }
+
+        public int Y { get; internal set; }
     }
 }
