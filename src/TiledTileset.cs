@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Xml;
@@ -229,8 +230,10 @@ public class TiledTileset
             obj.Name = node.Attributes["name"]?.Value;
             obj.Type = node.Attributes["type"]?.Value;
             obj.Gid = int.Parse(node.Attributes["gid"]?.Value ?? "0");
-            obj.X = float.Parse(node.Attributes["x"].Value, CultureInfo.InvariantCulture);
-            obj.Y = float.Parse(node.Attributes["y"].Value, CultureInfo.InvariantCulture);
+
+            float x = float.Parse(node.Attributes["x"].Value, CultureInfo.InvariantCulture);
+            float y = float.Parse(node.Attributes["y"].Value, CultureInfo.InvariantCulture);
+            obj.Position = new PointF(x, y);
 
             if (nodesProperty != null) obj.Properties = ParseProperties(nodesProperty);
 
@@ -255,11 +258,16 @@ public class TiledTileset
 
             if (nodePoint != null) obj.Point = new TiledPoint();
 
+            var width = 0.0f;
+            var height = 0.0f;
+
             if (node.Attributes["width"] != null)
-                obj.Width = float.Parse(node.Attributes["width"].Value, CultureInfo.InvariantCulture);
+                width = float.Parse(node.Attributes["width"].Value, CultureInfo.InvariantCulture);
 
             if (node.Attributes["height"] != null)
-                obj.Height = float.Parse(node.Attributes["height"].Value, CultureInfo.InvariantCulture);
+                height = float.Parse(node.Attributes["height"].Value, CultureInfo.InvariantCulture);
+
+            obj.Size = new SizeF(width, height);
 
             if (node.Attributes["rotation"] != null)
                 obj.Rotation = float.Parse(node.Attributes["rotation"].Value, CultureInfo.InvariantCulture);

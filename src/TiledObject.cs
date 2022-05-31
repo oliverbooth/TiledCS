@@ -1,4 +1,5 @@
-﻿using TiledCS.Shapes;
+﻿using System.Drawing;
+using TiledCS.Shapes;
 
 namespace TiledCS;
 
@@ -16,11 +17,6 @@ public class TiledObject
     ///     Gets the tileset gid when the object is linked to a tile.
     /// </summary>
     public int Gid { get; internal set; }
-
-    /// <summary>
-    ///     Gets the object's height in pixels.
-    /// </summary>
-    public float Height { get; internal set; }
 
     /// <summary>
     ///     Gets the object id.
@@ -56,19 +52,16 @@ public class TiledObject
     ///     Gets the object type if defined. Null if none was set..
     /// </summary>
     public string Type { get; internal set; }
-
+    
     /// <summary>
-    ///     Gets the object's width in pixels.
+    ///     Gets the object's size.
     /// </summary>
-    public float Width { get; internal set; }
-
+    /// <value>The size, measured in pixels.</value>
+    public SizeF Size { get; internal set; }
+    
     /// <summary>
-    ///     Gets the object's x position in pixels.
+    ///     Gets the object's position.
     /// </summary>
-    public float X { get; internal set; }
-
-    /// <summary>
-    ///     Gets the object's y position in pixels.
-    /// </summary>
-    public float Y { get; internal set; }
+    /// <value>The position, measured in pixels.</value>
+    public PointF Position { get; internal set; }
 }

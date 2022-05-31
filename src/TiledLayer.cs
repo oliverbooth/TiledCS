@@ -1,4 +1,6 @@
-﻿namespace TiledCS;
+﻿using System.Drawing;
+
+namespace TiledCS;
 
 /// <summary>
 ///     Represents a tile layer as well as an object layer within a tile map.
@@ -26,11 +28,6 @@ public class TiledLayer
     public byte[] DataRotationFlags { get; internal set; }
 
     /// <summary>
-    ///     Total vertical tiles
-    /// </summary>
-    public int Height { get; internal set; }
-
-    /// <summary>
     ///     Gets the layer id.
     /// </summary>
     public int Id { get; internal set; }
@@ -56,24 +53,16 @@ public class TiledLayer
     public TiledObject[] Objects { get; internal set; }
 
     /// <summary>
-    ///     Gets the horizontal offset.
+    ///     Gets the layer's offset.
     /// </summary>
-    public float OffsetX { get; internal set; }
+    /// <value>The offset.</value>
+    public PointF Offset { get; internal set; }
 
     /// <summary>
-    ///     Gets the vertical offset.
+    ///     Gets the layer's parallax position.
     /// </summary>
-    public float OffsetY { get; internal set; }
-
-    /// <summary>
-    ///     Gets the parallax x position.
-    /// </summary>
-    public float ParallaxX { get; internal set; }
-
-    /// <summary>
-    ///     Gets the parallax y position.
-    /// </summary>
-    public float ParallaxY { get; internal set; }
+    /// <value>The parallax position.</value>
+    public PointF Parallax { get; internal set; }
 
     /// <summary>
     ///     Gets the layer properties if set.
@@ -96,7 +85,8 @@ public class TiledLayer
     public bool IsVisible { get; internal set; }
 
     /// <summary>
-    ///     Total horizontal tiles
+    ///     Gets the size of the layer.
     /// </summary>
-    public int Width { get; internal set; }
+    /// <value>The size of the layer, measured in tiles.</value>
+    public Size Size { get; internal set; }
 }

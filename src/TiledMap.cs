@@ -85,34 +85,22 @@ public class TiledMap
     public string RenderOrder { get; set; }
 
     /// <summary>
-    ///     Gets the amount of horizontal tiles.
+    ///     Gets the size of the map.
     /// </summary>
-    public int Width { get; set; }
+    /// <value>The size, measured in tiles.</value>
+    public Size Size { get; internal set; }
 
     /// <summary>
-    ///     Gets the amount of vertical tiles.
+    ///     Gets the size of a tile in the map.
     /// </summary>
-    public int Height { get; set; }
+    /// <value>The tile size, measured in pixels.</value>
+    public Size TileSize { get; internal set; }
 
     /// <summary>
-    ///     Gets the tile width in pixels.
+    ///     Gets the parallax origin.
     /// </summary>
-    public int TileWidth { get; set; }
-
-    /// <summary>
-    ///     Gets the tile height in pixels.
-    /// </summary>
-    public int TileHeight { get; set; }
-
-    /// <summary>
-    ///     Gets the parallax origin x.
-    /// </summary>
-    public float ParallaxOriginX { get; set; }
-
-    /// <summary>
-    ///     Gets the parallax origin y.
-    /// </summary>
-    public float ParallaxOriginY { get; set; }
+    /// <value>The parallax origin.</value>
+    public PointF ParallaxOrigin { get; internal set; }
 
     /// <summary>
     ///     Returns true if the map is configured as infinite
@@ -153,19 +141,28 @@ public class TiledMap
             BackgroundColor = nodeMap.Attributes["backgroundcolor"]?.Value;
             Infinite = nodeMap.Attributes["infinite"].Value == "1";
 
-            Width = int.Parse(nodeMap.Attributes["width"].Value);
-            Height = int.Parse(nodeMap.Attributes["height"].Value);
-            TileWidth = int.Parse(nodeMap.Attributes["tilewidth"].Value);
-            TileHeight = int.Parse(nodeMap.Attributes["tileheight"].Value);
+            int width = int.Parse(nodeMap.Attributes["width"].Value);
+            int height = int.Parse(nodeMap.Attributes["height"].Value);
+            Size = new Size(width, height);
+
+            int tileWidth = int.Parse(nodeMap.Attributes["tilewidth"].Value);
+            int tileHeight = int.Parse(nodeMap.Attributes["tileheight"].Value);
+            TileSize = new Size(tileWidth, tileHeight);
 
             if (nodesProperty != null) Properties = ParseProperties(nodesProperty);
             if (nodesTileset != null) Tilesets = ParseTilesets(nodesTileset);
             if (nodesLayer != null) Layers = ParseLayers(nodesLayer, nodesObjectGroup, nodesImageLayer);
             if (nodesGroup != null) Groups = ParseGroups(nodesGroup);
+
+            var parallaxOriginX = 0.0f;
+            var parallaxOriginY = 0.0f;
+
             if (attrParallaxOriginX != null)
-                ParallaxOriginX = float.Parse(attrParallaxOriginX.Value, CultureInfo.InvariantCulture);
+                parallaxOriginX = float.Parse(attrParallaxOriginX.Value, CultureInfo.InvariantCulture);
             if (attrParallaxOriginY != null)
-                ParallaxOriginY = float.Parse(attrParallaxOriginY.Value, CultureInfo.InvariantCulture);
+                parallaxOriginY = float.Parse(attrParallaxOriginY.Value, CultureInfo.InvariantCulture);
+
+            ParallaxOrigin = new PointF(parallaxOriginX, parallaxOriginY);
         }
         catch (Exception ex)
         {
@@ -266,19 +263,30 @@ public class TiledMap
         var tiledLayer = new TiledLayer();
         tiledLayer.Id = int.Parse(node.Attributes["id"].Value);
         tiledLayer.Name = node.Attributes["name"].Value;
-        tiledLayer.Height = int.Parse(node.Attributes["height"].Value);
-        tiledLayer.Width = int.Parse(node.Attributes["width"].Value);
+
+        int width = int.Parse(node.Attributes["width"].Value);
+        int height = int.Parse(node.Attributes["height"].Value);
+        tiledLayer.Size = new Size(width, height);
+
         tiledLayer.Type = TiledLayerType.TileLayer;
         tiledLayer.IsVisible = true;
+
+        var offsetX = 0.0f;
+        var offsetY = 0.0f;
+        var parallaxX = 0.0f;
+        var parallaxY = 0.0f;
 
         if (attrVisible != null) tiledLayer.IsVisible = attrVisible.Value == "1";
         if (attrLocked != null) tiledLayer.IsLocked = attrLocked.Value == "1";
         if (attrTint != null) tiledLayer.TintColor = attrTint.Value;
-        if (attrOffsetX != null) tiledLayer.OffsetX = float.Parse(attrOffsetX.Value);
-        if (attrOffsetY != null) tiledLayer.OffsetY = float.Parse(attrOffsetY.Value);
-        if (attrParallaxX != null) tiledLayer.OffsetX = float.Parse(attrParallaxX.Value);
-        if (attrParallaxY != null) tiledLayer.OffsetY = float.Parse(attrParallaxY.Value);
+        if (attrOffsetX != null) offsetX = float.Parse(attrOffsetX.Value);
+        if (attrOffsetY != null) offsetY = float.Parse(attrOffsetY.Value);
+        if (attrParallaxX != null) parallaxX = float.Parse(attrParallaxX.Value);
+        if (attrParallaxY != null) parallaxY = float.Parse(attrParallaxY.Value);
         if (nodesProperty != null) tiledLayer.Properties = ParseProperties(nodesProperty);
+        
+        tiledLayer.Offset = new PointF(offsetX, offsetY);
+        tiledLayer.Parallax = new PointF(parallaxX, parallaxY);
 
         ParseTileLayerData(nodeData, ref tiledLayer);
 
@@ -480,12 +488,17 @@ public class TiledMap
         tiledLayer.Type = TiledLayerType.ObjectLayer;
         tiledLayer.IsVisible = true;
 
+        var offsetX = 0.0f;
+        var offsetY = 0.0f;
+
         if (attrVisible != null) tiledLayer.IsVisible = attrVisible.Value == "1";
         if (attrLocked != null) tiledLayer.IsLocked = attrLocked.Value == "1";
         if (attrTint != null) tiledLayer.TintColor = attrTint.Value;
-        if (attrOffsetX != null) tiledLayer.OffsetX = int.Parse(attrOffsetX.Value);
-        if (attrOffsetY != null) tiledLayer.OffsetY = int.Parse(attrOffsetY.Value);
+        if (attrOffsetX != null) offsetX = int.Parse(attrOffsetX.Value);
+        if (attrOffsetY != null) offsetY = int.Parse(attrOffsetY.Value);
         if (nodesProperty != null) tiledLayer.Properties = ParseProperties(nodesProperty);
+
+        tiledLayer.Offset = new PointF(offsetX, offsetY);
 
         return tiledLayer;
     }
@@ -506,13 +519,18 @@ public class TiledMap
         tiledLayer.Type = TiledLayerType.ImageLayer;
         tiledLayer.IsVisible = true;
 
+        var offsetX = 0.0f;
+        var offsetY = 0.0f;
+
         if (attrVisible != null) tiledLayer.IsVisible = attrVisible.Value == "1";
         if (attrLocked != null) tiledLayer.IsLocked = attrLocked.Value == "1";
         if (attrTint != null) tiledLayer.TintColor = attrTint.Value;
-        if (attrOffsetX != null) tiledLayer.OffsetX = int.Parse(attrOffsetX.Value);
-        if (attrOffsetY != null) tiledLayer.OffsetY = int.Parse(attrOffsetY.Value);
+        if (attrOffsetX != null) offsetX = int.Parse(attrOffsetX.Value);
+        if (attrOffsetY != null) offsetY = int.Parse(attrOffsetY.Value);
         if (nodesProperty != null) tiledLayer.Properties = ParseProperties(nodesProperty);
         if (nodeImage != null) tiledLayer.Image = ParseImage(nodeImage);
+
+        tiledLayer.Offset = new PointF(offsetX, offsetY);
 
         return tiledLayer;
     }
@@ -543,8 +561,10 @@ public class TiledMap
             obj.Name = node.Attributes["name"]?.Value;
             obj.Type = node.Attributes["type"]?.Value;
             obj.Gid = int.Parse(node.Attributes["gid"]?.Value ?? "0");
-            obj.X = float.Parse(node.Attributes["x"].Value, CultureInfo.InvariantCulture);
-            obj.Y = float.Parse(node.Attributes["y"].Value, CultureInfo.InvariantCulture);
+
+            float x = float.Parse(node.Attributes["x"].Value, CultureInfo.InvariantCulture);
+            float y = float.Parse(node.Attributes["y"].Value, CultureInfo.InvariantCulture);
+            obj.Position = new PointF(x, y);
 
             if (nodesProperty != null) obj.Properties = ParseProperties(nodesProperty);
 
@@ -571,11 +591,16 @@ public class TiledMap
 
             if (nodePoint != null) obj.Point = new TiledPoint();
 
+            var width = 0.0f;
+            var height = 0.0f;
+
             if (node.Attributes["width"] != null)
-                obj.Width = float.Parse(node.Attributes["width"].Value, CultureInfo.InvariantCulture);
+                width = float.Parse(node.Attributes["width"].Value, CultureInfo.InvariantCulture);
 
             if (node.Attributes["height"] != null)
-                obj.Height = float.Parse(node.Attributes["height"].Value, CultureInfo.InvariantCulture);
+                height = float.Parse(node.Attributes["height"].Value, CultureInfo.InvariantCulture);
+
+            obj.Size = new SizeF(width, height);
 
             if (node.Attributes["rotation"] != null)
                 obj.Rotation = float.Parse(node.Attributes["rotation"].Value, CultureInfo.InvariantCulture);
@@ -748,7 +773,7 @@ public class TiledMap
     /// <returns>True if the tile was flipped horizontally or False if not</returns>
     public bool IsTileFlippedHorizontal(TiledLayer layer, int tileHor, int tileVert)
     {
-        return IsTileFlippedHorizontal(layer, tileHor + tileVert * layer.Width);
+        return IsTileFlippedHorizontal(layer, tileHor + tileVert * layer.Size.Width);
     }
 
     /// <summary>
@@ -771,7 +796,7 @@ public class TiledMap
     /// <returns>True if the tile was flipped vertically or False if not</returns>
     public bool IsTileFlippedVertical(TiledLayer layer, int tileHor, int tileVert)
     {
-        return IsTileFlippedVertical(layer, tileHor + tileVert * layer.Width);
+        return IsTileFlippedVertical(layer, tileHor + tileVert * layer.Size.Width);
     }
 
     /// <summary>
@@ -794,7 +819,7 @@ public class TiledMap
     /// <returns>True if the tile was flipped diagonally or False if not</returns>
     public bool IsTileFlippedDiagonal(TiledLayer layer, int tileHor, int tileVert)
     {
-        return IsTileFlippedDiagonal(layer, tileHor + tileVert * layer.Width);
+        return IsTileFlippedDiagonal(layer, tileHor + tileVert * layer.Size.Width);
     }
 
     /// <summary>
