@@ -52,13 +52,13 @@ public class TiledObject
     ///     Gets the object type if defined. Null if none was set..
     /// </summary>
     public string Type { get; internal set; }
-    
+
     /// <summary>
     ///     Gets the object's size.
     /// </summary>
     /// <value>The size, measured in pixels.</value>
     public SizeF Size { get; internal set; }
-    
+
     /// <summary>
     ///     Gets the object's position.
     /// </summary>
