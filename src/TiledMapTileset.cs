@@ -3,7 +3,7 @@ namespace TiledCS;
 /// <summary>
 ///     Represents an element within the Tilesets array of a TiledMap object.
 /// </summary>
-public class TiledMapTileset
+public sealed class TiledMapTileset
 {
     /// <summary>
     ///     Gets the first GID, that is, the GID which matches the tile with source vector 0,0.

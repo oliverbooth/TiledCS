@@ -5,7 +5,7 @@ namespace TiledCS;
 /// <summary>
 ///     Represents a tile layer as well as an object layer within a tile map.
 /// </summary>
-public class TiledLayer
+public sealed class TiledLayer
 {
     /// <summary>
     ///     Gets the chunks of data when the map is infinite.

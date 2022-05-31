@@ -3,7 +3,7 @@
 /// <summary>
 ///     Represents a layer or object group.
 /// </summary>
-public class TiledGroup
+public sealed class TiledGroup
 {
     /// <summary>
     ///     Gets the group's subgroups.

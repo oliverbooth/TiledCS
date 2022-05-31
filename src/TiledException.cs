@@ -5,7 +5,7 @@ namespace TiledCS;
 /// <summary>
 ///     Represents an exception only thrown by TiledCS
 /// </summary>
-public class TiledException : Exception
+public sealed class TiledException : Exception
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="TiledException" /> class.

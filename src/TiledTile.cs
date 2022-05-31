@@ -4,7 +4,7 @@
 ///     Represents a tile within a tileset.
 /// </summary>
 /// <remarks>These are not defined for all tiles within a tileset, only the ones with properties, terrains and animations.</remarks>
-public class TiledTile
+public sealed class TiledTile
 {
     /// <summary>
     ///     An array of tile animations. Is null if none were defined.

@@ -3,7 +3,7 @@
 /// <summary>
 ///     Represents an image.
 /// </summary>
-public class TiledImage
+public sealed class TiledImage
 {
     /// <summary>
     ///     Gets the image height.

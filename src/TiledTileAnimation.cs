@@ -3,7 +3,7 @@
 /// <summary>
 ///     Represents a tile animation. Tile animations are a group of tiles which act as frames for an animation.
 /// </summary>
-public class TiledTileAnimation
+public sealed class TiledTileAnimation
 {
     /// <summary>
     ///     Gets the duration in miliseconds.

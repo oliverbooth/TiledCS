@@ -6,7 +6,7 @@ namespace TiledCS;
 /// <summary>
 ///     Represents an tiled object defined in object layers and tiles.
 /// </summary>
-public class TiledObject
+public sealed class TiledObject
 {
     /// <summary>
     ///     If an object was set to an ellipse shape, this property will be set

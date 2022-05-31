@@ -11,7 +11,7 @@ namespace TiledCS;
 /// <summary>
 ///     Represents a Tiled tileset.
 /// </summary>
-public class TiledTileset
+public sealed class TiledTileset
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="TiledTileset" /> class.

@@ -4,7 +4,7 @@
 ///     Represents a property object in both tilesets, maps, layers and objects. Values are all in string but you can use the 'type'
 ///     property for conversions.
 /// </summary>
-public class TiledProperty
+public sealed class TiledProperty
 {
     /// <summary>
     ///     Gets the property name or key in string format.

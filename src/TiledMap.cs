@@ -12,7 +12,7 @@ namespace TiledCS;
 /// <summary>
 ///     Represents a Tiled map.
 /// </summary>
-public class TiledMap
+public sealed class TiledMap
 {
     private const uint FlippedHorizontallyFlag = 0b10000000000000000000000000000000;
     private const uint FlippedVerticallyFlag = 0b01000000000000000000000000000000;

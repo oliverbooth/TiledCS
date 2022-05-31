@@ -3,7 +3,7 @@
 /// <summary>
 ///     Represents a tile layer chunk when the map is infinite
 /// </summary>
-public class TiledChunk
+public sealed class TiledChunk
 {
     public int[] Data { get; internal set; }
 
