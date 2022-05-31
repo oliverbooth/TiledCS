@@ -1,13 +1,12 @@
-﻿namespace TiledCS.Shapes
+﻿namespace TiledCS.Shapes;
+
+/// <summary>
+///     Represents a polygon.
+/// </summary>
+public sealed class TiledPolygon : TiledShape
 {
     /// <summary>
-    ///     Represents a polygon.
+    ///     Gets the array of vertices where each two elements represent an x and y position. Like 'x,y,x,y,x,y,x,y'..
     /// </summary>
-    public sealed class TiledPolygon : TiledShape
-    {
-        /// <summary>
-        ///     Gets the array of vertices where each two elements represent an x and y position. Like 'x,y,x,y,x,y,x,y'..
-        /// </summary>
-        public float[] Points { get; internal set; }
-    }
+    public float[] Points { get; internal set; }
 }

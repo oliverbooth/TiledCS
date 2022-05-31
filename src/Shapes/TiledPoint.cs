@@ -1,9 +1,8 @@
-﻿namespace TiledCS.Shapes
+﻿namespace TiledCS.Shapes;
+
+/// <summary>
+///     Represents a point.
+/// </summary>
+public sealed class TiledPoint : TiledShape
 {
-    /// <summary>
-    ///     Represents a point.
-    /// </summary>
-    public sealed class TiledPoint : TiledShape
-    {
-    }
 }
