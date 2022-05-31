@@ -14,7 +14,7 @@ namespace TiledCS
         /// <summary>
         /// The Tiled version used to create this tileset
         /// </summary>
-        public string TiledVersion { get; set; }
+        public string Version { get; set; }
         /// <summary>
         /// The tileset name
         /// </summary>
@@ -110,7 +110,7 @@ namespace TiledCS
                 var attrMargin = nodeTileset.Attributes["margin"];
                 var attrSpacing = nodeTileset.Attributes["spacing"];
 
-                TiledVersion = nodeTileset.Attributes["tiledversion"].Value;
+                Version = nodeTileset.Attributes["tiledversion"].Value;
                 Name = nodeTileset.Attributes["name"]?.Value;
                 TileWidth = int.Parse(nodeTileset.Attributes["tilewidth"].Value);
                 TileHeight = int.Parse(nodeTileset.Attributes["tileheight"].Value);

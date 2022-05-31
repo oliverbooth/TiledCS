@@ -5,7 +5,7 @@ namespace TiledCS
     /// <summary>
     /// Defines all extension methods used within TiledCS
     /// </summary>
-    public static class Extensions
+    public static class TiledExtensions
     {
         /// <summary>
         /// Converts a comma separated string to an int array
